@@ -4,7 +4,6 @@ Nucleo da simulacao de sumo de robos - APS UNIP.
 Todas as unidades: centimetros, segundos, radianos, gramas.
 A arena e o robo seguem o regulamento e as specs do kit RS100 V2.
 
-AVISO DE HONESTIDADE DE MODELAGEM
 ---------------------------------
 Este simulador e cinematico com um modelo de empurrao simplificado.
 Ele NAO reproduz: inercia rotacional real, escorregamento lateral,
@@ -19,16 +18,14 @@ valores medidos em bancada antes de confiar nos resultados.
 
 import math
 
-
-# CONSTANTES DA ARENA (regulamento APS)
+# Constantes da arena
 ARENA_RAIO = 50.0          # cm - diametro 100 cm
 BORDA_LARGURA = 5.0        # cm - faixa branca
 RAIO_LINHA_BRANCA = ARENA_RAIO - BORDA_LARGURA   # 45.0 cm
 TEMPO_ROUND = 60.0         # s
 DT = 0.02                  # s - passo de 50 Hz
 
-# PARAMETROS DO ROBO 
-# 
+# Parametro do robo 
 ROBO_COMP = 19.5           # cm
 ROBO_LARG = 17.0           # cm
 ENTRE_EIXOS = 12.0         # cm - distancia entre rodas motrizes
@@ -39,7 +36,7 @@ VEL_MAX = 60.0             # cm/s  [MEDIR] motor 200 RPM, roda ~65mm
 MU_PNEU = 0.60             # coef. atrito pneu/MDF  [MEDIR] teste da rampa
 G = 981.0                  # cm/s^2
 
-# PARAMETROS DOS SENSORES
+# Parametros dos sensores 
 HCSR04_ALCANCE = 100.0     # cm
 HCSR04_CONE = math.radians(15)   # meio-angulo do cone
 HCSR04_PERIODO = 0.060     # s - uma leitura a cada 60 ms (limitacao real)

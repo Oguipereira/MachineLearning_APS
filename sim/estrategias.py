@@ -32,9 +32,7 @@ class Base:
         return 0.0, 0.0
 
 
-# ===============================================================
 #  NOSSA ESTRATEGIA
-# ===============================================================
 
 class Competidor(Base):
     """Estrategia principal do nosso robo.
@@ -155,11 +153,8 @@ class Competidor(Base):
         return 0.0 if not s.borda_qualquer else 1.0
 
 
-# ===============================================================
 #  OPONENTES SINTETICOS
 #  O ponto do simulador: testar contra varios perfis, nao contra si mesmo.
-# ===============================================================
-
 class Kamikaze(Base):
     """Acelera sempre. Perigoso e burro - sai sozinho com frequencia.
     Representa o grupo que so pensou em atacar."""
