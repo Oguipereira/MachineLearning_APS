@@ -46,6 +46,7 @@ class Competidor(Base):
     Parametros no __init__ sao os "genes" que o batch.py otimiza.
     """
     nome = "Competidor"
+    JANELA_CAUTELA = 1.5   # s - por quanto tempo apos a FUGA continua cauteloso
 
     def __init__(self, usa_tof=False, t_abertura=0.45, vel_busca=0.55,
                  dist_ataque=45.0, freio_borda=0.75, t_fuga=0.30,
@@ -54,7 +55,7 @@ class Competidor(Base):
         self.t_abertura = t_abertura      # s de giro inicial
         self.vel_busca = vel_busca
         self.dist_ataque = dist_ataque    # cm - abaixo disso, ataca
-        self.freio_borda = freio_borda    # raio relativo onde comeca a conter
+        self.freio_borda = freio_borda    # limiar de cautela em [0, 1]
         self.t_fuga = t_fuga              # s de re
         self.t_giro_fuga = t_giro_fuga    # s de giro apos a re
 
@@ -64,11 +65,13 @@ class Competidor(Base):
         self.t_ant = 0.0
         self.lado_busca = 1
         self.borda_era_frente = True
+        self.t_desde_fuga = self.JANELA_CAUTELA   # comeca sem cautela
 
     def decidir(self, s, t):
         dt = t - self.t_ant
         self.t_ant = t
         self.t_estado += dt
+        self.t_desde_fuga += dt
 
         # ---- PRIORIDADE 1: BORDA -----------------------------------
         # Interrompe qualquer estado. No Arduino isso vira interrupcao.
@@ -106,6 +109,7 @@ class Competidor(Base):
             return (-1.0, -1.0) if self.borda_era_frente else (1.0, 1.0)
         if self.t_estado < self.t_fuga + self.t_giro_fuga:
             return 1.0, -1.0
+        self.t_desde_fuga = 0.0
         self._ir("BUSCA")
         return 0.0, 0.0
 
@@ -137,20 +141,15 @@ class Competidor(Base):
         vel = 1.0 if d < self.dist_ataque else 0.75
 
         # PRIORIDADE 2: contencao perto da borda.
-        # Longe do centro, empurra com torque - nao com velocidade.
-        # Sem isso o robo se auto-elimina perseguindo o adversario.
-        raio_rel = self._raio_estimado(s)
-        if raio_rel > self.freio_borda:
+        # O robo real nao sabe sua posicao exata, entao usamos o que ele
+        # consegue medir de verdade: ha quanto tempo saiu da ultima FUGA.
+        # Logo apos escapar da borda, ainda esta perto dela - decai ate
+        # zero apos JANELA_CAUTELA segundos sem tocar a linha de novo.
+        cautela = max(0.0, 1.0 - self.t_desde_fuga / self.JANELA_CAUTELA)
+        if cautela > self.freio_borda:
             vel *= 0.55
 
         return (vel - corr, vel + corr)
-
-    @staticmethod
-    def _raio_estimado(s):
-        """No simulador teriamos a posicao exata, mas o robo real nao tem.
-        Usamos so o que o robo consegue saber: se algum sensor viu branco
-        recentemente. Mantido conservador de proposito."""
-        return 0.0 if not s.borda_qualquer else 1.0
 
 
 #  OPONENTES SINTETICOS
