@@ -32,8 +32,6 @@ O fluxo geral do projeto segue as seguintes etapas:
 A arquitetura do projeto foi organizada para separar a simulação, análise dos dados e integração embarcada, permitindo evolução contínua e maior facilidade de manutenção.
 
 
-MachineLearning_APS
-│
 ├── arduino/
 │   └── sumo_basico/
 │
@@ -41,9 +39,8 @@ MachineLearning_APS
 │   ├── motor de simulação
 │   ├── estratégias
 │   └── componentes auxiliares
-│
-├── coletar.py
-├── analisar.py
-├── visualizar.py
-├── batch.py
-└── requirements.txt
+coletar.py
+analisar.py
+visualizar.py
+batch.py
+requirements.txt
