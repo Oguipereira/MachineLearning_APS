@@ -30,17 +30,3 @@ O fluxo geral do projeto segue as seguintes etapas:
 6. Identificação das melhores configurações para implementação física.
 
 A arquitetura do projeto foi organizada para separar a simulação, análise dos dados e integração embarcada, permitindo evolução contínua e maior facilidade de manutenção.
-
-
-├── arduino/
-│   └── sumo_basico/
-│
-├── sim/
-│   ├── motor de simulação
-│   ├── estratégias
-│   └── componentes auxiliares
-coletar.py
-analisar.py
-visualizar.py
-batch.py
-requirements.txt
